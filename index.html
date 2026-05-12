@@ -48,34 +48,6 @@
         opacity: 0.3;
       }
 
-      #musicOverlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.95);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-      }
-
-      .overlay-content {
-        text-align: center;
-        color: white;
-      }
-
-      .overlay-content button {
-        margin-top: 20px;
-        padding: 15px 30px;
-        font-size: 18px;
-        border: none;
-        border-radius: 30px;
-        background: #ff4da6;
-        color: white;
-        cursor: pointer;
-      }
       .container {
         position: relative;
         z-index: 2;
@@ -347,17 +319,13 @@
   <body>
     <div class="stars"></div>
 
+    <audio id="countdownSong" loop>
+      <source src="countdown.mp3" type="audio/mp3" />
+    </audio>
+
     <audio id="birthdaySong" loop>
       <source src="birthday-song.mp3" type="audio/mp3" />
     </audio>
-
-    <div id="musicOverlay">
-      <div class="overlay-content">
-        <h2>❤️ Click to Enter ❤️</h2>
-        <p>Your surprise is waiting...</p>
-        <button id="startBtn">Enter</button>
-      </div>
-    </div>
 
     <div class="container">
       <!-- countdown -->
@@ -367,8 +335,20 @@
       </div>
 
       <!-- birthday section -->
-      <div id="birthdaySection">
+      <div id="birthdaySection" style="position: relative">
         <h1 id="birthdayText" class="stars-text"></h1>
+        <button
+          id="playBirthdayBtn"
+          style="
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+          "
+        >
+          🎵 Play
+        </button>
 
         <!-- floating polaroids -->
         <div class="polaroid left">
@@ -483,57 +463,51 @@
     <div id="secretHeart">❤️</div>
 
     <script>
-      const birthdayDate = new Date("May 13, 2026 02:16:00").getTime();
+      const birthdayDate = new Date("May 13, 2026 02:27:00").getTime();
 
       const countdown = document.getElementById("countdown");
       const countdownSection = document.getElementById("countdownSection");
       const birthdaySection = document.getElementById("birthdaySection");
 
       // document.getElementById("birthdaySong").play();
+      const countdownSong = document.getElementById("countdownSong");
       const birthdaySong = document.getElementById("birthdaySong");
 
       // Check if birthday has already passed
       const initialDistance = birthdayDate - new Date().getTime();
 
-      document
-        .getElementById("startBtn")
-        .addEventListener("click", function () {
-          document.getElementById("musicOverlay").style.display = "none";
+      // Initialize the experience
+      function initializeExperience() {
+        // If birthday hasn't passed yet, start countdown with countdown song
+        if (initialDistance > 0) {
+          countdownSong
+            .play()
+            .then(() => {
+              console.log("Countdown song started");
+            })
+            .catch((err) => {
+              console.log("Countdown song playback failed:", err);
+            });
+        } else {
+          // If birthday has already passed, show birthday mode and play button
+          countdownSection.style.display = "none";
+          birthdaySection.style.display = "block";
 
-          // If birthday hasn't passed yet, start birthday song
-          if (initialDistance > 0) {
-            birthdaySong
-              .play()
-              .then(() => {
-                console.log("Birthday song started");
-              })
-              .catch((err) => {
-                console.log("Birthday song playback failed:", err);
-              });
-          } else {
-            // If birthday has already passed, show birthday mode and play birthday song
-            countdownSection.style.display = "none";
-            birthdaySection.style.display = "block";
+          // Show button to play birthday song (requires user interaction)
+          document.getElementById("playBirthdayBtn").style.display = "block";
 
-            birthdaySong.currentTime = 0;
-            birthdaySong
-              .play()
-              .then(() => {
-                console.log("Birthday song started");
-              })
-              .catch((err) => {
-                console.log("Birthday song playback failed:", err);
-              });
+          launchConfetti();
+          continuousFireworks();
+          createHearts();
+          createPetals();
+          startSlideshow();
+          typeBirthdayMessage();
+          typeFinalMessage();
+        }
+      }
 
-            launchConfetti();
-            continuousFireworks();
-            createHearts();
-            createPetals();
-            startSlideshow();
-            typeBirthdayMessage();
-            typeFinalMessage();
-          }
-        });
+      // Start the experience immediately
+      initializeExperience();
 
       /* countdown */
       if (initialDistance > 0) {
@@ -546,6 +520,13 @@
 
             countdownSection.style.display = "none";
             birthdaySection.style.display = "block";
+
+            // Stop countdown song and play birthday song
+            countdownSong.pause();
+            countdownSong.currentTime = 0;
+
+            // Show button to play birthday song (requires user interaction)
+            document.getElementById("playBirthdayBtn").style.display = "block";
 
             launchConfetti();
             continuousFireworks();
@@ -665,6 +646,20 @@
           });
         }, 2000);
       }
+
+      /* play birthday song */
+      document.getElementById("playBirthdayBtn").onclick = function () {
+        birthdaySong.currentTime = 0;
+        birthdaySong
+          .play()
+          .then(() => {
+            console.log("Birthday song started");
+            document.getElementById("playBirthdayBtn").style.display = "none";
+          })
+          .catch((err) => {
+            console.log("Birthday song playback failed:", err);
+          });
+      };
 
       /* gift */
       document.getElementById("giftBtn").onclick = function () {
