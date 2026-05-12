@@ -523,8 +523,21 @@
           countdownSection.style.display = "none";
           birthdaySection.style.display = "block";
 
-          document.getElementById("countdownSong").pause();
-          document.getElementById("birthdaySong").play();
+          countdownSong.pause();
+          countdownSong.currentTime = 0;
+
+          // Small delay to ensure countdown song is fully stopped
+          setTimeout(() => {
+            birthdaySong.currentTime = 0;
+            birthdaySong
+              .play()
+              .then(() => {
+                console.log("Birthday song started");
+              })
+              .catch((err) => {
+                console.log("Birthday song playback failed:", err);
+              });
+          }, 100);
 
           launchConfetti();
           continuousFireworks();
