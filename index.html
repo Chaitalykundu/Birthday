@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday ❤️</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #7305d4,
+          #28024a,
+          #510391,
+          #460e71,
+          #31193f
+        );
+        background-size: 400% 400%;
+        animation: gradientGlow 10s ease infinite;
+        color: white;
+        text-align: center;
+        overflow-x: hidden;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      /* Container */
+      .container {
+        z-index: 2;
+        position: relative;
+        padding: 40px 20px;
+      }
+
+      /* Countdown */
+      #countdownSection {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #countdown {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+
+      /* Birthday Section */
+      #birthdaySection {
+        display: none;
+        padding-top: 50px;
+      }
+
+      h1 {
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+      }
+
+      /* Slideshow */
+      .slideshow {
+        width: 320px;
+        height: 320px;
+        margin: 30px auto;
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0px 4px 25px rgba(255, 255, 255, 0.3);
+      }
+
+      .slideshow img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+
+      .slideshow img.active {
+        opacity: 1;
+      }
+
+      /* Story Message */
+      .story-box {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 25px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        line-height: 2;
+      }
+
+      /* Balloons */
+      .balloon {
+        position: absolute;
+        bottom: -150px;
+        width: 60px;
+        height: 80px;
+        border-radius: 50%;
+        animation: floatUp 12s infinite linear;
+      }
+
+      .balloon::after {
+        content: "";
+        width: 2px;
+        height: 60px;
+        background: white;
+        position: absolute;
+        top: 80px;
+        left: 50%;
+      }
+
+      .red {
+        background: red;
+        left: 10%;
+      }
+      .blue {
+        background: blue;
+        left: 30%;
+      }
+      .yellow {
+        background: gold;
+        left: 50%;
+      }
+      .green {
+        background: green;
+        left: 70%;
+      }
+      .pink {
+        background: hotpink;
+        left: 85%;
+      }
+
+      @keyframes floatUp {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(-120vh);
+        }
+      }
+
+      /* Lights */
+      .lights {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        padding: 20px;
+      }
+
+      .bulb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        animation: glow 1s infinite alternate;
+      }
+
+      .bulb:nth-child(1) {
+        background: red;
+      }
+      .bulb:nth-child(2) {
+        background: yellow;
+      }
+      .bulb:nth-child(3) {
+        background: blue;
+      }
+      .bulb:nth-child(4) {
+        background: green;
+      }
+      .bulb:nth-child(5) {
+        background: pink;
+      }
+
+      @keyframes glow {
+        from {
+          box-shadow: 0 0 5px white;
+        }
+        to {
+          box-shadow: 0 0 20px white;
+        }
+      }
+
+      @keyframes gradientGlow {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Analog Clock */
+      .clock {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+        margin: 20px auto;
+        box-shadow: 0px 4px 25px rgba(255, 255, 255, 0.2);
+      }
+
+      .clock::after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+      }
+
+      .clock .hand {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform-origin: bottom center;
+        border-radius: 10px;
+      }
+
+      .clock .hour-hand {
+        width: 6px;
+        height: 60px;
+        background: white;
+        transform: translateX(-50%) rotate(0deg);
+      }
+
+      .clock .minute-hand {
+        width: 4px;
+        height: 80px;
+        background: white;
+        transform: translateX(-50%) rotate(0deg);
+      }
+
+      .clock .second-hand {
+        width: 2px;
+        height: 90px;
+        background: #ff6b6b;
+        transform: translateX(-50%) rotate(0deg);
+      }
+
+      /* Clock numbers */
+      .clock .number {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+      }
+
+      .clock .number:nth-child(1) {
+        transform: rotate(30deg);
+      }
+      .clock .number:nth-child(2) {
+        transform: rotate(60deg);
+      }
+      .clock .number:nth-child(3) {
+        transform: rotate(90deg);
+      }
+      .clock .number:nth-child(4) {
+        transform: rotate(120deg);
+      }
+      .clock .number:nth-child(5) {
+        transform: rotate(150deg);
+      }
+      .clock .number:nth-child(6) {
+        transform: rotate(180deg);
+      }
+      .clock .number:nth-child(7) {
+        transform: rotate(210deg);
+      }
+      .clock .number:nth-child(8) {
+        transform: rotate(240deg);
+      }
+      .clock .number:nth-child(9) {
+        transform: rotate(270deg);
+      }
+      .clock .number:nth-child(10) {
+        transform: rotate(300deg);
+      }
+      .clock .number:nth-child(11) {
+        transform: rotate(330deg);
+      }
+      .clock .number:nth-child(12) {
+        transform: rotate(0deg);
+      }
+
+      .sparkle-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 5;
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.35);
+        animation:
+          sparkleBurst 1.3s ease-out forwards,
+          sparkleGlow 1.4s ease-in-out infinite alternate;
+      }
+
+      .sparkle.lighted {
+        box-shadow:
+          0 0 22px rgba(255, 255, 255, 0.95),
+          0 0 45px rgba(255, 255, 255, 0.4);
+      }
+
+      @keyframes sparkleBurst {
+        0% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(0.35);
+        }
+        40% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--dx), var(--dy)) scale(1.8);
+        }
+      }
+
+      @keyframes sparkleGlow {
+        from {
+          transform: translate(-50%, -50%) scale(0.35);
+        }
+        to {
+          transform: translate(-50%, -50%) scale(0.55);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Music -->
+    <audio id="countdownSong" loop>
+      <source src="countdown-.mp3" type="audio/mp3" />
+    </audio>
+    <audio id="birthdaySong" loop>
+      <source src="birthday--song.mp3" type="audio/mp3" />
+    </audio>
+
+    <!-- Lights -->
+    <div class="lights">
+      <div class="bulb"></div>
+      <div class="bulb"></div>
+      <div class="bulb"></div>
+      <div class="bulb"></div>
+      <div class="bulb"></div>
+    </div>
+
+    <!-- Balloons -->
+    <div class="balloon red"></div>
+    <div class="balloon blue"></div>
+    <div class="balloon yellow"></div>
+    <div class="balloon green"></div>
+    <div class="balloon pink"></div>
+
+    <div class="container">
+      <!-- Countdown -->
+      <div id="countdownSection">
+        <h1>⏳ Countdown to Your Special Day ❤️</h1>
+        <div id="countdown"></div>
+
+        <!-- Analog Clock -->
+        <div class="clock">
+          <div class="number">1</div>
+          <div class="number">2</div>
+          <div class="number">3</div>
+          <div class="number">4</div>
+          <div class="num~ber">5</div>
+          <div class="number">6</div>
+          <div class="number">7</div>
+          <div class="number">8</div>
+          <div class="number">9</div>
+          <div class="number">10</div>
+          <div class="number">11</div>
+          <div class="number">12</div>
+          <div class="hand hour-hand"></div>
+          <div class="hand minute-hand"></div>
+          <div class="hand second-hand"></div>
+        </div>
+      </div>
+
+      <!-- Birthday Reveal -->
+      <div id="birthdaySection">
+        <h1>🎉 Happy Birthday Love ❤️</h1>
+
+        <div class="slideshow">
+          <img src="photo1.jpg" class="active" />
+          <img src="photo2.jpg" />
+          <img src="photo3.jpg" />
+        </div>
+
+        <div class="story-box">
+          <p>
+            We started as just colleagues... <br /><br />
+
+            sharing office gossip, random complaints, silly talks about work and
+            people. <br /><br />
+
+            And somewhere between those conversations, we started sharing our
+            days... our thoughts... our little problems... and eventually
+            everything. <br /><br />
+
+            Just two months ago, we became closer than I ever expected.
+            <br /><br />
+
+            People told me different things about you... they said you had ego,
+            they said a lot of things. <br /><br />
+
+            But the person I found was completely different — someone with a
+            soft heart, someone who cares deeply, someone who makes me feel
+            special in ways words can't explain. <br /><br />
+
+            Yes, sometimes you disappear and make me miss you a little too
+            much... but somehow your care always finds its way back to me.
+            <br /><br />
+
+            And the funniest part? We still haven’t met yet... <br /><br />
+
+            But I’m already waiting for that day so eagerly — the day I’ll
+            finally see you standing in front of me. <br /><br />
+
+            Until then... thank you for becoming such a beautiful part of my
+            life. <br /><br />
+
+            <strong
+              >Happy Birthday to the person who unexpectedly became my favorite
+              chapter ❤️</strong
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const birthdayDate = new Date("May 12, 2026 16:46:00").getTime();
+
+      const countdown = document.getElementById("countdown");
+      const countdownSection = document.getElementById("countdownSection");
+      const birthdaySection = document.getElementById("birthdaySection");
+      const countdownSong = document.getElementById("countdownSong");
+      const birthdaySong = document.getElementById("birthdaySong");
+
+      // Start playing countdown song
+      countdownSong.play();
+
+      // Update analog clock
+      function updateClock() {
+        const now = new Date();
+        const seconds = now.getSeconds();
+        const minutes = now.getMinutes();
+        const hours = now.getHours() % 12;
+
+        const secondDeg = seconds * 6; // 6 degrees per second
+        const minuteDeg = minutes * 6 + seconds * 0.1; // 6 degrees per minute + smooth movement
+        const hourDeg = hours * 30 + minutes * 0.5; // 30 degrees per hour + minute influence
+
+        document.querySelector(".second-hand").style.transform =
+          `translateX(-50%) rotate(${secondDeg}deg)`;
+        document.querySelector(".minute-hand").style.transform =
+          `translateX(-50%) rotate(${minuteDeg}deg)`;
+        document.querySelector(".hour-hand").style.transform =
+          `translateX(-50%) rotate(${hourDeg}deg)`;
+      }
+
+      // Update clock immediately and then every second
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      const timer = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = birthdayDate - now;
+
+        if (distance <= 0) {
+          clearInterval(timer);
+
+          countdownSection.style.display = "none";
+          birthdaySection.style.display = "block";
+
+          // Stop countdown song and play birthday song
+          countdownSong.pause();
+          countdownSong.currentTime = 0;
+          birthdaySong.play();
+
+          // Start continuous sparkle celebration
+          startSparkles();
+
+          startSlideshow();
+          return;
+        }
+
+        const hours = Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdown.innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+      }, 1000);
+
+      function startSlideshow() {
+        const images = document.querySelectorAll(".slideshow img");
+        let current = 0;
+
+        setInterval(() => {
+          images[current].classList.remove("active");
+          current = (current + 1) % images.length;
+          images[current].classList.add("active");
+        }, 2000);
+      }
+
+      let sparkleInterval;
+
+      function createSparkles() {
+        const container =
+          document.querySelector(".sparkle-container") ||
+          (() => {
+            const div = document.createElement("div");
+            div.className = "sparkle-container";
+            document.body.appendChild(div);
+            return div;
+          })();
+
+        const colors = [
+          "#ff4da6",
+          "#52c7ff",
+          "#ffd84d",
+          "#6cff8b",
+          "#c86bff",
+          "#ff8f4d",
+          "#43f2ff",
+          "#ff5cc7",
+        ];
+
+        for (let i = 0; i < 18; i++) {
+          const sparkle = document.createElement("div");
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          sparkle.className =
+            "sparkle" + (Math.random() > 0.75 ? " lighted" : "");
+          const startX = Math.random() * 100;
+          const startY = Math.random() * 100;
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 80 + Math.random() * 220;
+          const dx = Math.cos(angle) * distance + "px";
+          const dy = Math.sin(angle) * distance + "px";
+
+          sparkle.style.left = `${startX}%`;
+          sparkle.style.top = `${startY}%`;
+          sparkle.style.background = `radial-gradient(circle, ${color} 0%, rgba(255,255,255,0.8) 35%, rgba(255,255,255,0) 80%)`;
+          sparkle.style.boxShadow = `0 0 18px ${color}, 0 0 40px ${color}66`;
+          sparkle.style.setProperty("--dx", dx);
+          sparkle.style.setProperty("--dy", dy);
+          sparkle.style.animationDelay = `${Math.random() * 0.2}s`;
+
+          container.appendChild(sparkle);
+
+          sparkle.addEventListener("animationend", () => {
+            sparkle.remove();
+          });
+        }
+      }
+
+      function startSparkles() {
+        if (sparkleInterval) return;
+        createSparkles();
+        sparkleInterval = setInterval(createSparkles, 240);
+      }
+    </script>
+  </body>
+</html>
