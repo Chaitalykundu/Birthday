@@ -347,10 +347,6 @@
   <body>
     <div class="stars"></div>
 
-    <audio id="countdownSong" loop>
-      <source src="countdown.mp3" type="audio/mp3" />
-    </audio>
-
     <audio id="birthdaySong" loop>
       <source src="birthday-song.mp3" type="audio/mp3" />
     </audio>
@@ -487,47 +483,38 @@
     <div id="secretHeart">❤️</div>
 
     <script>
-      const birthdayDate = new Date("May 13, 2026 00:00:00").getTime();
+      const birthdayDate = new Date("May 13, 2026 02:16:00").getTime();
 
       const countdown = document.getElementById("countdown");
       const countdownSection = document.getElementById("countdownSection");
       const birthdaySection = document.getElementById("birthdaySection");
 
-      // document.getElementById("countdownSong").play();
-      const countdownSong = document.getElementById("countdownSong");
+      // document.getElementById("birthdaySong").play();
       const birthdaySong = document.getElementById("birthdaySong");
+
+      // Check if birthday has already passed
+      const initialDistance = birthdayDate - new Date().getTime();
 
       document
         .getElementById("startBtn")
         .addEventListener("click", function () {
-          countdownSong
-            .play()
-            .then(() => {
-              console.log("Music started");
-            })
-            .catch((err) => {
-              console.log("Playback failed:", err);
-            });
-
           document.getElementById("musicOverlay").style.display = "none";
-        });
 
-      /* countdown */
-      const timer = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = birthdayDate - now;
+          // If birthday hasn't passed yet, start birthday song
+          if (initialDistance > 0) {
+            birthdaySong
+              .play()
+              .then(() => {
+                console.log("Birthday song started");
+              })
+              .catch((err) => {
+                console.log("Birthday song playback failed:", err);
+              });
+          } else {
+            // If birthday has already passed, show birthday mode and play birthday song
+            countdownSection.style.display = "none";
+            birthdaySection.style.display = "block";
 
-        if (distance <= 0) {
-          clearInterval(timer);
-
-          countdownSection.style.display = "none";
-          birthdaySection.style.display = "block";
-
-          countdownSong.pause();
-          countdownSong.currentTime = 0;
-
-          // Small delay to ensure countdown song is fully stopped
-          setTimeout(() => {
             birthdaySong.currentTime = 0;
             birthdaySong
               .play()
@@ -537,26 +524,50 @@
               .catch((err) => {
                 console.log("Birthday song playback failed:", err);
               });
-          }, 100);
 
-          launchConfetti();
-          continuousFireworks();
-          createHearts();
-          createPetals();
-          startSlideshow();
-          typeBirthdayMessage();
-          typeFinalMessage();
-          return;
-        }
+            launchConfetti();
+            continuousFireworks();
+            createHearts();
+            createPetals();
+            startSlideshow();
+            typeBirthdayMessage();
+            typeFinalMessage();
+          }
+        });
 
-        const hours = Math.floor(
-          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-        );
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      /* countdown */
+      if (initialDistance > 0) {
+        const timer = setInterval(() => {
+          const now = new Date().getTime();
+          const distance = birthdayDate - now;
 
-        countdown.innerHTML = `${hours}h ${minutes}m ${seconds}s`;
-      }, 1000);
+          if (distance <= 0) {
+            clearInterval(timer);
+
+            countdownSection.style.display = "none";
+            birthdaySection.style.display = "block";
+
+            launchConfetti();
+            continuousFireworks();
+            createHearts();
+            createPetals();
+            startSlideshow();
+            typeBirthdayMessage();
+            typeFinalMessage();
+            return;
+          }
+
+          const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+          );
+          const minutes = Math.floor(
+            (distance % (1000 * 60 * 60)) / (1000 * 60),
+          );
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          countdown.innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+        }, 1000);
+      }
 
       /* typing heading */
       function typeBirthdayMessage() {
